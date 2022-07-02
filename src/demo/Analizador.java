@@ -10,7 +10,7 @@ public class Analizador {
         
        
 
-        String[] palabrasReservadas = {"int", "if", "else", "while", "switch", "for", "each", "try", "catch", "then"};
+        String[] palabrasReservadas = {"int", "if", "else", "while", "switch", "for", "each", "try", "catch", "then","double"};
 
         String[] delimitadores = {"(", ")"};
 

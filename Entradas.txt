@@ -1,0 +1,9 @@
+##Entrada 1 (Alumno aprobado o desaprobado según la nota) 
+
+if (nota >= 11.5 && nota <= 20) { System.out.println("Alumno Aprobado"); aprob = aprob+1; } else { System.out.println("Alumno desaprobado"); desaprob = desaprob+1; }
+
+
+
+##Entrada 2 (Parte del Algoritmo de identificación de Tokens) 
+
+switch (token) { case "+": System.out.println ("Operador Suma"; break; case "-": System.out.println ("Operador Resta"); break;}

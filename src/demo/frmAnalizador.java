@@ -21,12 +21,11 @@ public class frmAnalizador extends javax.swing.JFrame {
 
     public void analizar() {
         HashMap<String, Integer> reservadas = new HashMap<>();
+        HashMap<String, Integer> metodos = new HashMap<>();
         HashMap<String, Integer> operadoresAritmeticos = new HashMap<>();
         HashMap<String, Integer> operadoresLogicos = new HashMap<>();
         HashMap<String, Integer> operadoresComparacion = new HashMap<>();
-        HashMap<String, Integer> identificadores = new HashMap<>();
         HashMap<String, Integer> delimitadores = new HashMap<>();
-        HashMap<String, Integer> numeros = new HashMap<>();
 
         //Reservadas
         reservadas.put("if", 0);
@@ -36,16 +35,16 @@ public class frmAnalizador extends javax.swing.JFrame {
         reservadas.put("float", 0);
         reservadas.put("long", 0);
         reservadas.put("new", 0);
-        reservadas.put("boolean",0);
-        reservadas.put("break",0);
-        reservadas.put("char",0);
-        reservadas.put("continue",0);
-        reservadas.put("final",0);
+        reservadas.put("boolean", 0);
+        reservadas.put("break", 0);
+        reservadas.put("char", 0);
+        reservadas.put("continue", 0);
+        reservadas.put("final", 0);
         reservadas.put("float", 0);
         reservadas.put("else", 0);
         reservadas.put("while", 0);
         reservadas.put("switch", 0);
-        reservadas.put("case",0);
+        reservadas.put("case", 0);
         reservadas.put("for", 0);
         reservadas.put("try", 0);
         reservadas.put("catch", 0);
@@ -56,7 +55,12 @@ public class frmAnalizador extends javax.swing.JFrame {
         reservadas.put("protected", 0);
         reservadas.put("return", 0);
         reservadas.put("do", 0);
-        
+
+        //Métodos
+        metodos.put("System.out.println", 0);
+        metodos.put("Math.pow", 0);
+        metodos.put("Math.sqrt", 0);
+
         //Operadores Aritméticos
         operadoresAritmeticos.put("/", 0);
         operadoresAritmeticos.put("*", 0);
@@ -92,13 +96,26 @@ public class frmAnalizador extends javax.swing.JFrame {
         //Lógica
         StringTokenizer st = new StringTokenizer(entrada, "{}();,\"+-*/ \n\t", true);
         String token, cadena = "";
+
         while (st.hasMoreTokens()) {
             token = st.nextToken();
+
             if (!" ".equals(token) && !"\n".equals(token) && !"\t".equals(token)) {
                 if (reservadas.containsKey(token)) {
                     reservadas.put(token, reservadas.get(token) + 1);
                     if (reservadas.get(token) > 0) {
                         modelo.addRow(new Object[]{token, "Palabra reservada"});
+                    }
+                } else if (metodos.containsKey(token)) {
+                    metodos.put(token, metodos.get(token) + 1);
+                    switch (token) {
+                        case "System.out.println" ->
+                            modelo.addRow(new Object[]{token, "Método Println"});
+                        case "Math.pow" ->
+                            modelo.addRow(new Object[]{token, "Método Math Pow"});
+                        case "Math.sqrt" ->
+                            modelo.addRow(new Object[]{token, "Método Math Sqrt"});
+
                     }
                 } else if (operadoresAritmeticos.containsKey(token)) {
                     switch (token) {
@@ -142,33 +159,27 @@ public class frmAnalizador extends javax.swing.JFrame {
                         while (st.hasMoreTokens() && !"\"".equals(token)) {
                             cadena += token;
                             token = st.nextToken();
-                           
+
                         }
                         modelo.addRow(new Object[]{cadena, "Cadena"});
                         cadena = "";
                     }
                     //Fin Cadena
-                    
+
                     if (delimitadores.get(token) > 0) {
                         modelo.addRow(new Object[]{token, "Delimitador"});
                     }
 
-                } else if (token.matches("([0-9]+)|([0-9]*.[0-9]+)")) {
-                    numeros.put(token, 1);
-                    if (numeros.get(token) > 0) {
-                        if (token.matches("[0-9]([0-9])*")) {
-                            modelo.addRow(new Object[]{token, "Número"});
-                        }
-                        if (token.matches("[0-9]+.[0-9]+")) {
-                            modelo.addRow(new Object[]{token, "Número Decimal"});
-                        }
-                    }
-                } else {
-                    identificadores.put(token, 1);
-                    if (identificadores.get(token) > 0) {
-                        modelo.addRow(new Object[]{token, "Identificador"});
+                } else if (token.matches("([0-9]*)|([0-9]*.[0-9]+)")) {
+                    double numero = Double.parseDouble(token);
+                    if (numero % 1 == 0) {
+                        modelo.addRow(new Object[]{token, "Número"});
+                    } else {
+                        modelo.addRow(new Object[]{token, "Número Decimal"});
                     }
 
+                } else {
+                    modelo.addRow(new Object[]{token, "Identificador"});
                 }
 
             }

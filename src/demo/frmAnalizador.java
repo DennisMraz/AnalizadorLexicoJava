@@ -28,6 +28,7 @@ public class frmAnalizador extends javax.swing.JFrame {
         HashMap<String, Integer> delimitadores = new HashMap<>();
 
         //Reservadas
+        //Prueba Windows 10
         reservadas.put("if", 0);
         reservadas.put("int", 0);
         reservadas.put("String", 0);
